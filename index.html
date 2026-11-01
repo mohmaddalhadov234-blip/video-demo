@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#000000">
+<title>video</title>
+<style>
+:root{--g:#39ff14;--dg:#1fa51f;--r:#ff2020;--y:#ffd400}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#000;color:var(--g);font:12px/1.35 ui-monospace,Menlo,"Courier New",monospace;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-text-size-adjust:100%}
+#app{height:100%;display:flex;flex-direction:column;gap:6px;padding:calc(env(safe-area-inset-top,0px) + 6px) 8px calc(env(safe-area-inset-bottom,0px) + 6px);animation:fl 3s infinite;text-shadow:0 0 5px rgba(57,255,20,.7)}
+.box{border:1px solid var(--dg);padding:5px 7px;box-shadow:0 0 8px rgba(57,255,20,.25) inset}
+h1{font-size:15px;letter-spacing:1px;color:var(--r);text-shadow:0 0 8px var(--r)}
+.sub{display:flex;justify-content:space-between;font-size:11px;color:var(--dg);margin-top:2px}
+#track{height:10px;border:1px solid var(--g);margin-top:5px}
+#bar{height:100%;width:0;background:var(--g);box-shadow:0 0 10px var(--g)}
+#svc{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px}
+.s{display:flex;justify-content:space-between;font-size:11px}
+.s b{font-weight:400}
+.w{color:#2a6b2a}.sc{color:var(--y);animation:bk .5s steps(2) infinite;text-shadow:0 0 6px var(--y)}.dt{color:var(--r);text-shadow:0 0 6px var(--r)}.ok{color:var(--g)}
+#net{font-size:11px;display:grid;grid-template-columns:auto 1fr;gap:1px 8px}
+#net i{font-style:normal;color:var(--dg)}
+#xt{height:6px;border:1px solid var(--dg);margin-top:3px;grid-column:1/3}
+#xb{height:100%;width:0;background:var(--g)}
+#term{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;font-size:11px;word-break:break-all}
+.l{white-space:pre-wrap}
+.cmd{color:#fff;text-shadow:0 0 5px #fff}.cmd u{text-decoration:none;color:var(--r)}
+.out{color:var(--dg)}.pkt{color:#4dd2ff;text-shadow:0 0 4px #4dd2ff}.warn{color:var(--r);text-shadow:0 0 6px var(--r)}
+#crt{position:fixed;inset:0;pointer-events:none;z-index:10;background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.28) 3px),radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.65) 100%)}
+#crt::after{content:"";position:absolute;left:0;right:0;height:90px;top:-90px;background:linear-gradient(to bottom,rgba(57,255,20,0),rgba(57,255,20,.07),rgba(57,255,20,0));animation:sw 4s linear infinite}
+#end{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--r);padding:calc(env(safe-area-inset-top,0px) + 24px) 20px calc(env(safe-area-inset-bottom,0px) + 16px);animation:al .8s infinite;text-shadow:0 0 10px var(--r)}
+#end::before{content:"";position:absolute;inset:6px;border:4px solid var(--r);box-shadow:0 0 25px var(--r),0 0 25px var(--r) inset;animation:bd .5s steps(2) infinite}
+#end .ic{font-size:54px;line-height:1}
+#end h2{font-size:30px;line-height:1.15;margin:12px 0 8px;letter-spacing:1px}
+#end .c{font-size:14px;margin-bottom:18px;color:#fff;text-shadow:0 0 8px var(--r)}
+#end ul{list-style:none;font-size:16px;line-height:1.9}
+#end small{position:absolute;left:20px;right:20px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);font-size:9px;color:#b36060;text-shadow:none;line-height:1.3}
+@keyframes bk{50%{opacity:.3}}
+@keyframes bd{50%{opacity:0}}
+@keyframes al{0%,100%{background:#120000}50%{background:#3d0000}}
+@keyframes sw{to{transform:translateY(130vh)}}
+@keyframes fl{0%,100%{opacity:1}48%{opacity:.97}50%{opacity:.88}52%{opacity:1}93%{opacity:.92}}
+@media (prefers-reduced-motion:reduce){#app,#crt::after{animation:none}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="box">
+    <h1>BLACKNODE — SECURITY BREACH CONSOLE</h1>
+    <div class="sub"><span id="ses">SESSION STATUS: ACTIVE</span><span id="pct">0%</span></div>
+    <div id="track"><div id="bar"></div></div>
+  </div>
+  <div class="box" id="svc"></div>
+  <div class="box" id="net">
+    <i>TLS</i><span id="hs">...</span>
+    <i>PACKET</i><span id="pid">-</span>
+    <i>ACK</i><span id="ack">-</span>
+    <i>HTTP</i><span id="http">-</span>
+    <i>UPLOAD</i><span id="up">0%</span>
+    <div id="xt"><div id="xb"></div></div>
+  </div>
+  <div class="box" id="term"></div>
+</div>
+<div id="crt"></div>
+<div id="end">
+  <div class="ic">☠</div>
+  <h2>ВАШИ ДАННЫЕ УКРАДЕНЫ</h2>
+  <div class="c">SYSTEM COMPROMISE COMPLETE</div>
+  <ul>
+    <li>TELEGRAM — DETECTED</li>
+    <li>WHATSAPP — DETECTED</li>
+    <li>TIKTOK — DETECTED</li>
+    <li>INSTAGRAM — DETECTED</li>
+    <li>YANDEX — DETECTED</li>
+    <li>SAFARI — DETECTED</li>
+  </ul>
+</div>
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var term=$('#term'),bar=$('#bar'),pct=$('#pct'),ses=$('#ses');
+var rnd=function(a,b){return Math.floor(Math.random()*(b-a+1))+a};
+var hex=function(n){var s='';for(var i=0;i<n;i++)s+=rnd(0,15).toString(16);return s};
+var ip=function(){return rnd(10,223)+'.'+rnd(0,255)+'.'+rnd(0,255)+'.'+rnd(1,254)};
+
+/* Сервисы: [название, порог старта %] */
+var SV=[['TELEGRAM',6],['WHATSAPP',18],['TIKTOK',30],['INSTAGRAM',42],['YANDEX',54],['SAFARI',66],['CHROME',78]];
+var svBox=$('#svc'),svEl=[],svSt=[];
+SV.forEach(function(s,i){
+  var d=document.createElement('div');d.className='s';
+  d.innerHTML='<span>'+s[0]+'</span><b class="w">WAITING</b>';
+  svBox.appendChild(d);svEl.push(d.lastChild);svSt.push('w');
+});
+
+/* Сценарий */
+var L=[];
+function c(t){L.push(['cmd',t])}
+function o(t){L.push(['out',t])}
+function f(n){for(var i=0;i<n;i++)L.push(['pkt','PKT-'+hex(8)+' > '+ip()+':'+rnd(1024,65000)+' len='+rnd(64,1460)+' '+hex(16)])}
+c('uname -a');
+o('Linux blacknode 6.8.11-kali2-arm64 #1 SMP PREEMPT Kali 6.8.11-1kali2 aarch64 GNU/Linux');
+c('ip addr show wlan0');
+o('3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 state UP');
+o('    link/ether '+hex(2)+':'+hex(2)+':'+hex(2)+':'+hex(2)+':'+hex(2)+':'+hex(2));
+o('    inet 192.168.0.'+rnd(20,200)+'/24 brd 192.168.0.255 scope global wlan0');
+f(5);
+c('ps aux | head -n 8');
+o('USER   PID %CPU %MEM COMMAND');
+o('root     1  0.0  0.1 /sbin/init');
+o('root   '+rnd(300,900)+'  1.2  0.4 /usr/sbin/sshd -D');
+o('root   '+rnd(900,1900)+' 12.8  3.1 blacknode-agent --demo');
+o('root   '+rnd(1900,4000)+'  4.4  1.2 netprobe --sim');
+f(6);
+c('ss -tuna');
+o('Netid State   Local Address:Port    Peer Address:Port');
+o('tcp   ESTAB   192.168.0.42:'+rnd(40000,60000)+'  '+ip()+':443');
+o('tcp   ESTAB   192.168.0.42:'+rnd(40000,60000)+'  '+ip()+':443');
+o('tcp   SYN-SENT 192.168.0.42:'+rnd(40000,60000)+' '+ip()+':80');
+o('udp   UNCONN  0.0.0.0:5353   0.0.0.0:*');
+f(6);
+c('curl -I https://node-7.blacknode.test/handshake');
+o('HTTP/2 200 OK');
+o('server: blacknode/1.0');
+o('x-session: '+hex(24));
+f(5);
+c('systemctl status blacknode-agent');
+o('● blacknode-agent.service - BLACKNODE demo agent');
+o('   Active: active (running) since '+new Date().toTimeString().slice(0,8));
+o('   Main PID: '+rnd(1000,9000)+' (blacknode)');
+f(6);
+c('nmap -sV -T4 192.168.0.0/24   # simulation');
+o('Starting Nmap 7.94 ( https://nmap.org ) [VISUAL SIMULATION]');
+o('Nmap scan report for 192.168.0.1');
+o('PORT    STATE SERVICE');
+o('22/tcp  open  ssh');
+o('80/tcp  open  http');
+o('443/tcp open  https');
+o('Nmap done: 256 IP addresses (4 hosts up) scanned');
+f(7);
+c('sha256sum payload_demo.bin');
+o(hex(64)+'  payload_demo.bin');
+f(5);
+c('browser-diagnostics --scan --demo');
+o('[*] telegram.session ........ scanning');
+o('[*] whatsapp.web ............ scanning');
+o('[*] tiktok.cache ............ scanning');
+o('[*] instagram.token ......... scanning');
+f(7);
+o('[*] yandex.passwords ........ scanning');
+o('[*] safari.keychain ......... scanning');
+o('[*] chrome.profile .......... scanning');
+f(6);
+c('network-telemetry --live');
+o('rx: '+rnd(100,900)+' KB/s   tx: '+rnd(100,900)+' KB/s   rtt: '+rnd(8,40)+' ms');
+o('rx: '+rnd(100,900)+' KB/s   tx: '+rnd(100,900)+' KB/s   rtt: '+rnd(8,40)+' ms');
+o('rx: '+rnd(100,900)+' KB/s   tx: '+rnd(100,900)+' KB/s   rtt: '+rnd(8,40)+' ms');
+f(8);
+c('./upload --fake-data --target node-7.blacknode.test');
+o('[+] TLS 1.3 handshake complete');
+o('[+] uploading FAKE_TEST_DATA_'+hex(6)+' ...');
+f(10);
+o('[+] server acknowledgment received');
+o('[+] HTTP 200 OK');
+f(6);
+c('sha256sum -c session.manifest');
+o('session.manifest: OK');
+f(6);
+o('[!] COMPILING REPORT ...');
+f(4);
+
+/* Состояние */
+var idx=0,done=false,fast=false,timers=[];
+function addLine(cls,txt){
+  var d=document.createElement('div');d.className='l '+cls;
+  if(cls==='cmd'){var u=document.createElement('u');u.textContent='root@blacknode:~# ';d.appendChild(u);d.appendChild(document.createTextNode(txt))}
+  else d.textContent=txt;
+  term.appendChild(d);
+  while(term.children.length>60)term.removeChild(term.firstChild);
+}
+function services(p){
+  SV.forEach(function(s,i){
+    var st=p<s[1]?'w':(p<s[1]+9?'sc':(s[0]==='CHROME'?'ok':'dt'));
+    if(st!==svSt[i]){
+      svSt[i]=st;
+      var t=st==='w'?'WAITING':st==='sc'?'SCANNING':st==='ok'?'CHECK COMPLETE':'DETECTED';
+      svEl[i].className=st;svEl[i].textContent=t;
+      if(st==='dt')addLine('warn','[!] SECURITY ALERT: '+s[0]+' — DETECTED');
+      if(st==='ok')addLine('out','[+] '+s[0]+' — CHECK COMPLETE');
+    }
+  });
+}
+function step(){
+  if(done)return;
+  if(idx>=L.length){finish();return}
+  var it=L[idx++];
+  addLine(it[0],it[1]);
+  var p=Math.min(100,Math.round(idx/L.length*100));
+  bar.style.width=p+'%';pct.textContent=p+'%';
+  services(p);
+  if(it[0]==='cmd'){
+    if(it[1].indexOf('browser-diagnostics')===0)fast=true;
+    else if(it[1].indexOf('network-telemetry')===0)fast=false;
+  }
+  var d=it[0]==='cmd'?rnd(100,180):it[0]==='pkt'?rnd(15,35):rnd(35,70);
+  if(fast)d=Math.round(d*0.25);
+  timers.push(setTimeout(step,d));
+}
+function finish(){
+  done=true;
+  bar.style.width='100%';pct.textContent='100%';
+  ses.textContent='SECURITY ALERT';ses.style.color='#ff2020';
+  timers.push(setTimeout(function(){$('#end').style.display='flex'},600));
+}
+
+/* Сетевая анимация (только визуальная, без запросов) */
+var HS=['ClientHello','ServerHello','Certificate','KeyExchange','Finished','ESTABLISHED'];
+var xf=0;
+setInterval(function(){
+  if(done)return;
+  var p=parseInt(pct.textContent,10)||0;
+  $('#hs').textContent='TLS 1.3 '+HS[Math.min(HS.length-1,Math.floor(p/17))];
+  $('#pid').textContent='PKT-'+hex(8)+'-'+hex(4).toUpperCase();
+  $('#ack').textContent='seq='+rnd(100000,999999)+' ack='+rnd(100000,999999);
+  $('#http').textContent=p>8?'HTTP/1.1 200 OK ('+rnd(12,90)+' ms)':'connecting...';
+  xf+=rnd(4,16);if(xf>100)xf=0;
+  $('#xb').style.width=xf+'%';
+  $('#up').textContent=Math.max(0,p-3)+'%  FAKE_DATA '+rnd(1,99)+'.'+rnd(0,9)+' KB';
+},350);
+
+/* Тройное касание на финальном экране — перезапуск */
+var taps=[];
+document.addEventListener('click',function(){
+  var n=Date.now();taps=taps.filter(function(t){return n-t<800});taps.push(n);
+  if(taps.length>=3&&done)location.reload();
+});
+
+/* Автозапуск */
+step();
+})();
+</script>
+</body>
+</html>
